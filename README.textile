@@ -10,4 +10,4 @@ h2. Usage
 
 h3. Ruby Project
 
-TODO
+bash -s stable < <(curl -s https://raw.github.com/dreamhead/1step/master/ruby/starter.sh)

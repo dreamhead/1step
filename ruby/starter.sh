@@ -30,22 +30,26 @@ function install_rvm {
   echo 'export rvm_project_rvmrc=1' >> $HOME/.rvmrc
 }
 
-function check_ruby {
-  rvm list | grep $RUBY_VERSION > /dev/null || install_ruby
-  rvm use $RUBY_VERSION_WITH_GEMSET
-  log "ruby installed"
+function create_project_rvmrc {
+  echo 'rvm_install_on_use_flag=1' >> .rvmrc
+  echo $RVMRC >> .rvmrc
 }
 
 function prepare_project_rvmrc {
-  echo 'rvm_install_on_use_flag=1' >> .rvmrc
-  echo $RVMRC >> .rvmrc
+  [ ! -s .rvmrc ] && create_project_rvmrc
+}
+
+function check_ruby {
+  rvm list | grep $RUBY_VERSION > /dev/null || install_ruby
+  prepare_project_rvmrc
+  rvm use $RUBY_VERSION_WITH_GEMSET
+  log "ruby installed"
 }
 
 function install_ruby {
   log "installing ruby" &&
   rvm pkg install readline &&
-  rvm install $RUBY -C "-with-readline-dir=$HOME/.rvm/usr" && \
-  prepare_project_rvmrc
+  rvm install $RUBY -C "-with-readline-dir=$HOME/.rvm/usr"
 }
 
 function check_bundler {
@@ -61,7 +65,7 @@ function install_bundler {
 
 function install_bundle {
   log "install bundle"
-  bundle install
+  bundle install && \
   log "bundle installed"
 }
 
