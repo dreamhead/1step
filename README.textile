@@ -4,10 +4,23 @@ h1. 1step
 
 h2. Description
 
-1step is an universal software project starter.
+1step is an universal software project starter which helps you setup basic development environment.
 
 h2. Usage
 
 h3. Ruby Project
 
+h4. Preparatiion
+
+Prepare Gemfile for your project
+
+h4. 1step
+
 bash -s stable < <(curl -s https://raw.github.com/dreamhead/1step/master/ruby/starter.sh)
+
+h4. What 1step did for you
+
+* Install RVM
+* Install Ruby
+* Install bundler
+* Run bundle install to install gem for you

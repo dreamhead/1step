@@ -14,8 +14,16 @@ function check_ruby_environment {
   check_rvm && check_ruby && check_bundler
 }
 
+function newer_rvm_version {
+  rvm version | sed '/^$/d' | awk '{print $2}' | awk -F . '{ if($1 > 1 || $2 >=10) { print 1 } else { print 0 } }' > /dev/null
+}
+
+function need_to_install_rvm {
+  hash rvm && load_rvm && newer_rvm_version
+}
+
 function check_rvm {
-  hash rvm || install_rvm
+  need_to_install_rvm || install_rvm
   load_rvm
   log "rvm installed"
 }
