@@ -38,6 +38,7 @@ function check_rvm {
 
 function reload_rvm {
   rvm reload
+  log "rvm reloaded"
 }
 
 function load_rvm {
