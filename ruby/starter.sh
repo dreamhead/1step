@@ -61,7 +61,7 @@ function create_project_rvmrc {
 }
 
 function prepare_project_rvmrc {
-  [ ! -s .rvmrc ] && create_project_rvmrc
+  [ -s .rvmrc ] || create_project_rvmrc
 }
 
 function check_ruby {
@@ -88,14 +88,73 @@ function install_bundler {
   gem install bundler --no-ri --no-rdoc
 }
 
+function create_gemfile {
+  echo "source \"http://rubygems.org\"" >> Gemfile
+  echo "" >> Gemfile
+  echo "group(:test) do" >> Gemfile
+  echo "  gem 'rspec'" >> Gemfile
+  echo "end" >> Gemfile
+}
+
+function create_lib_dir {
+  mkdir -p lib
+}
+
+function create_spec_helper {
+  echo "require 'rubygems'" >> spec/spec_helper.rb
+  echo "require 'rspec'" >> spec/spec_helper.rb
+  echo "" >> spec/spec_helper.rb
+  echo "\$LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')" >> spec/spec_helper.rb
+}
+
+function create_spec_dir {
+  mkdir -p spec
+  [ -s spec/spec_helper.rb ] || create_spec_helper
+}
+
+function check_spec_dir {
+  [ -d spec ] || create_spec_dir
+}
+
+function create_rakefile {
+  echo "require 'rspec/core/rake_task'" >> Rakefile
+  echo "" >> Rakefile
+  echo "desc 'Default: run specs.'" >> Rakefile
+  echo "task :default => :spec" >> Rakefile
+  echo "" >> Rakefile
+  echo "desc 'Run specs'" >> Rakefile
+  echo "RSpec::Core::RakeTask.new" >> Rakefile
+}
+
+function check_rakefile {
+  [ -s Rakefile ] || create_rakefile
+}
+
+function create_project_skeleton {
+  create_lib_dir && \
+  check_spec_dir && \
+  check_rakefile
+}
+
+function check_project_skeleton {
+  log "create project skeleton"
+  create_project_skeleton
+  log "project skeleton created"
+}
+
+function prepare_gemfile {
+  [ -s .Gemfile ] || create_gemfile
+}
+
 function install_bundle {
+  prepare_gemfile 
   log "install bundle"
   bundle install && \
   log "bundle installed"
 }
 
 function prepare_dev_environment {
-  check_ruby_environment && install_bundle
+  check_ruby_environment && install_bundle && check_project_skeleton
 }
 
 function main {
