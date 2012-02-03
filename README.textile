@@ -1,20 +1,35 @@
 h1. 1step
 
+1step is the first step to kick off a software project.
+
 "Ye Zheng":mailto:dreamhead.cn@gmail.com
 
 h2. Description
 
+h3. Overview
+
 1step is an universal software project starter which helps you setup basic development environment.
+
+h3. Why
+
+It is very boring to setup development environment. Take a Ruby project as example. Before I write a single line of Ruby code, I need to
+* Install RVM
+* Install Ruby
+* Install bundler
+* Write a Gemfile
+* Create lib directory for source code
+* Create spec directory for test code
+* Create Rakefile as build script
+
+We have to face nearly the same situation for every other project as well. 
+
+What 1step try to do is to make our life easier.
 
 h2. Usage
 
 h3. Ruby Project
 
-h4. Preparation
-
-Prepare Gemfile for your project
-
-h4. 1step
+h4. Run 1step
 
 bash -s stable < <(curl -s https://raw.github.com/dreamhead/1step/master/ruby/starter.sh)
 
@@ -23,4 +38,9 @@ h4. What 1step did for you
 * Install RVM
 * Install Ruby
 * Install bundler
+* Generate default Gemfile if there is no Gemfile
 * Run bundle install to install gem for you
+* Geneate default project skeleton 
+** lib for source code
+** spec for test specification
+** Rakefile as default build script
