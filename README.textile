@@ -10,7 +10,7 @@ h2. Usage
 
 h3. Ruby Project
 
-h4. Preparatiion
+h4. Preparation
 
 Prepare Gemfile for your project
 
