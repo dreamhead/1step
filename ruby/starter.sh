@@ -7,25 +7,37 @@ RUBY="ruby-$RUBY_VERSION"
 RVMRC="rvm use --create $RUBY_VERSION_WITH_GEMSET"
 
 function log {
-  echo "*** $1"
+  printf "***%b\n" "$*" ; return $? ;
 }
 
 function check_ruby_environment {
   check_rvm && check_ruby && check_bundler
 }
 
-function newer_rvm_version {
-  rvm version | sed '/^$/d' | awk '{print $2}' | awk -F . '{ if($1 > 1 || $2 >=10) { print 1 } else { print 0 } }' > /dev/null
+function is_old_rvm {
+  is_old=`rvm version | sed '/^$/d' | awk '{print $2}' | awk -F . '{ if($1 > 1 || $2 >=10) { print 0 } else { print 1 } }'`
+  [[ is_old -eq 0 ]] && return 1 || return 0
 }
 
-function need_to_install_rvm {
-  hash rvm && load_rvm && newer_rvm_version
+function rvm_exists {
+  hash rvm
 }
 
-function check_rvm {
-  need_to_install_rvm || install_rvm
-  load_rvm
+function reinstall_rvm_for_old_version {
+  is_old_rvm && reinstall_rvm
+}
+
+function check_rvm { 
+  if [ rvm_exists ]; then
+    load_rvm && reinstall_rvm_for_old_version
+  else
+    install_rvm
+  fi
   log "rvm installed"
+}
+
+function reload_rvm {
+  rvm reload
 }
 
 function load_rvm {
@@ -36,6 +48,11 @@ function install_rvm {
   log "installing rvm"
   bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
   echo 'export rvm_project_rvmrc=1' >> $HOME/.rvmrc
+}
+
+function reinstall_rvm {
+  log 'rvm version is too old and reinstall rvm'
+  install_rvm && reload_rvm
 }
 
 function create_project_rvmrc {
