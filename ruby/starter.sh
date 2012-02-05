@@ -24,7 +24,7 @@ function reinstall_rvm_for_old_version {
 }
 
 function check_rvm { 
-  is_rvm_here=`hash rvm && echo $?`
+  is_rvm_here=`hash rvm 2>/dev/null; echo $?`
   if [[ $is_rvm_here -eq 0 ]]; then
     load_rvm && reinstall_rvm_for_old_version
   else
