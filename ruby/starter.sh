@@ -19,16 +19,13 @@ function is_old_rvm {
   [[ is_old -eq 0 ]] && return 1 || return 0
 }
 
-function rvm_exists {
-  hash rvm
-}
-
 function reinstall_rvm_for_old_version {
   is_old_rvm && reinstall_rvm
 }
 
 function check_rvm { 
-  if [ rvm_exists -eq 1 ]; then
+  is_rvm_here=`hash rvm && echo $?`
+  if [[ $is_rvm_here -eq 0 ]]; then
     load_rvm && reinstall_rvm_for_old_version
   else
     install_rvm
