@@ -28,7 +28,7 @@ function reinstall_rvm_for_old_version {
 }
 
 function check_rvm { 
-  if [ rvm_exists ]; then
+  if [ rvm_exists -eq 1 ]; then
     load_rvm && reinstall_rvm_for_old_version
   else
     install_rvm
