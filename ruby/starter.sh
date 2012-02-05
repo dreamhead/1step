@@ -28,7 +28,7 @@ function check_rvm {
   if [[ $is_rvm_here -eq 0 ]]; then
     load_rvm && reinstall_rvm_for_old_version
   else
-    install_rvm
+    install_rvm && load_rvm
   fi
   log "rvm installed"
 }
@@ -39,7 +39,6 @@ function reload_rvm {
 
 function load_rvm {
   [[ -s ~/.rvm/scripts/rvm ]] && . ~/.rvm/scripts/rvm
-}
 
 function install_rvm {
   log "installing rvm"
