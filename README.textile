@@ -31,7 +31,7 @@ h3. Ruby Project
 
 h4. Run 1step
 
-bash -s stable < <(curl -s https://raw.github.com/dreamhead/1step/master/ruby/starter.sh)
+  bash -s stable < <(curl -s https://raw.github.com/dreamhead/1step/master/ruby/starter.sh)
 
 h4. What 1step did for you
 

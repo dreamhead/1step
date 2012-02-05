@@ -142,12 +142,12 @@ function check_project_skeleton {
   log "project skeleton created"
 }
 
-function prepare_gemfile {
+function check_gemfile {
   [ -s .Gemfile ] || create_gemfile
 }
 
 function install_bundle {
-  prepare_gemfile 
+  check_gemfile 
   log "install bundle"
   bundle install && \
   log "bundle installed"
