@@ -39,6 +39,7 @@ function reload_rvm {
 
 function load_rvm {
   [[ -s ~/.rvm/scripts/rvm ]] && . ~/.rvm/scripts/rvm
+}
 
 function install_rvm {
   log "installing rvm"
