@@ -154,7 +154,37 @@ function prepare_dev_environment {
   check_ruby_environment && install_bundle && check_project_skeleton
 }
 
+function update_ruby_version {
+  RUBY_VERSION="$1"
+  RUBY_VERSION_WITH_GEMSET="$RUBY_VERSION@$PROJECT"
+  RUBY="ruby-$RUBY_VERSION"
+  RVMRC="rvm use --create $RUBY_VERSION_WITH_GEMSET"
+}
+
+function parse_args {
+  if (( $# == 1 )); then
+    version=$1
+    shift
+    update_ruby_version "$version"
+  fi
+}
+
+function usage {
+  printf "***%b\n" "
+Usage
+    1step [ruby_version]
+
+Example
+    1step 1.9.3-p0
+" ; return $? ;
+}
+
 function main {
+  if (( $# > 1 )); then
+    usage && exit 1
+  fi
+
+  parse_args "$@"
   prepare_dev_environment
 }
 
