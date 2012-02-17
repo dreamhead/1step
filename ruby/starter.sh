@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 current_dir=`pwd`
 PROJECT=`basename $current_dir`
-RUBY_VERSION='1.9.3-p0'
+RUBY_VERSION='1.9.3-p125'
 RUBY_VERSION_WITH_GEMSET="$RUBY_VERSION@$PROJECT"
 RUBY="ruby-$RUBY_VERSION"
 RVMRC="rvm use --create $RUBY_VERSION_WITH_GEMSET"
