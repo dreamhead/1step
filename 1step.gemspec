@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "1step"
   gem.require_paths = ["lib"]
-  gem.version       = FIRSTEP::VERSION
+  gem.version       = Firstep::VERSION
 
   gem.add_runtime_dependency 'thor', '>= 0.16.0'
   gem.add_development_dependency 'rspec', '~> 2.11.0'

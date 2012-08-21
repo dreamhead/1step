@@ -1,5 +1,4 @@
-require "1step/version"
+require '1step/version'
+require '1step/command'
 
-module FIRSTEP
-  # Your code goes here...
-end
+Firstep::Command.start
