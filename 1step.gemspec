@@ -1,10 +1,7 @@
 # -*- encoding: utf-8 -*-
 require File.expand_path('../lib/1step/version', __FILE__)
 
-puts "hello"
-
 Gem::Specification.new do |gem|
-  puts "world"
   gem.authors       = ["Ye Zheng"]
   gem.email         = ["dreamhead.cn@gmail.com"]
   gem.description   = %q{A command line tool to kick off a software project.}
@@ -19,4 +16,5 @@ Gem::Specification.new do |gem|
   gem.version       = FIRSTEP::VERSION
 
   gem.add_runtime_dependency 'thor', '>= 0.16.0'
+  gem.add_development_dependency 'rspec', '~> 2.11.0'
 end
