@@ -1,17 +1,20 @@
 module Firstep
-  class GradleBuildGenerator
-    attr_reader :build_file_name
+  module Java
+    class GradleBuildGenerator
+      include DefaultDependencies
 
-    def initialize
-      @build_file_name = 'build.gradle'
-    end
+      attr_reader :build_file_name
 
-    def create project_base
-      File.open(File.join(project_base, build_file_name), "w") { |file| file.write(content) }
-    end
+      def initialize
+        @build_file_name = 'build.gradle'
+      end
 
-    def content
-      %Q{apply plugin: 'java'
+      def create project_base
+        File.open(File.join(project_base, build_file_name), "w") { |file| file.write(content) }
+      end
+
+      def content
+        %Q{apply plugin: 'java'
 version = '1.0.0'
 
 repositories {
@@ -19,12 +22,40 @@ repositories {
 }
 
 dependencies {
-  testCompile 'junit:junit:4.10'
+  #{to_dependencies}
 }}
-    end
+      end
 
-    def self.create project_base
-      GradleBuildGenerator.new.create project_base
+      def to_dependencies
+        to_compile.join('\n') + "\n  " + to_test_compile.join('\n')
+      end
+
+      def to_test_compile
+        test_compile_dependencies.map {|dependency| dependency.extend(Gradle).as_test_compile }
+      end
+
+      def to_compile
+        compile_dependencies.map {|dependency| dependency.extend(Gradle).as_compile }
+      end
+
+
+      def self.create project_base
+        GradleBuildGenerator.new.create project_base
+      end
+
+      module Gradle
+        def as_gradle_dependency
+          %Q{'#{group_id}:#{artifact_id}:#{version}'}
+        end
+
+        def as_test_compile
+          'testCompile ' + as_gradle_dependency
+        end
+
+        def as_compile
+          'compile ' + as_gradle_dependency
+        end
+      end
     end
   end
 end

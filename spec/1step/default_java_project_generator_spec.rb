@@ -43,6 +43,7 @@ repositories {
 }
 
 dependencies {
+  compile 'com.google.guava:guava:13.0'
   testCompile 'junit:junit:4.10'
 }}
     end
