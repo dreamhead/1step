@@ -44,7 +44,9 @@ repositories {
 
 dependencies {
   compile 'com.google.guava:guava:13.0'
+  compile 'joda-time:joda-time:2.1'
   testCompile 'junit:junit:4.10'
+  testCompile 'org.mockito:mockito-all:1.9.0'
 }}
     end
   end

@@ -3,6 +3,8 @@ module Firstep
     class GradleBuildGenerator
       include DefaultDependencies
 
+      DEPENDENCY_SEP = "\n  "
+
       attr_reader :build_file_name
 
       def initialize
@@ -27,7 +29,7 @@ dependencies {
       end
 
       def to_dependencies
-        to_compile.join('\n') + "\n  " + to_test_compile.join('\n')
+        to_compile.join(DEPENDENCY_SEP) + DEPENDENCY_SEP + to_test_compile.join(DEPENDENCY_SEP)
       end
 
       def to_test_compile
