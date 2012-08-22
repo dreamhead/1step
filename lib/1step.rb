@@ -1,4 +1,4 @@
 require '1step/version'
 require '1step/command'
-
-Firstep::Command.start
+require '1step/java/project_layout'
+require '1step/java/project_generator'
