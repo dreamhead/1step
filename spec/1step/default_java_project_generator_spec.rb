@@ -22,10 +22,13 @@ describe "java project generator" do
     code_base = File.join(@project_base, "src")
     source_base = File.join(code_base, "main")
     test_base = File.join(code_base, "test")
+    java_source_base = File.join(source_base, 'java')
+    java_test_base = File.join(test_base, 'java')
+
 
     File.should be_exist(@project_base)
-    File.should be_exist(source_base)
-    File.should be_exist(test_base)
+    File.should be_exist(java_source_base)
+    File.should be_exist(java_test_base)
   end
 
   it "should generate build file" do

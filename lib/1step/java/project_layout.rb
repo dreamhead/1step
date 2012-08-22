@@ -10,7 +10,9 @@ module Firstep
         code_base = File.join(project_base, 'src')
         source_base = File.join(code_base, 'main')
         test_base = File.join(code_base, 'test')
-        ProjectLayout.new(project_base, source_base, test_base)
+        java_source_base = File.join(source_base, 'java')
+        java_test_base = File.join(test_base, 'java')
+        ProjectLayout.new(project_base, java_source_base, java_test_base)
       end
 
       attr_reader :project_base, :source_base, :test_base
