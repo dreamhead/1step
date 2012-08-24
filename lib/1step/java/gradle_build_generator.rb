@@ -1,22 +1,16 @@
 module Firstep
   module Java
     class GradleBuildGenerator
-      include DefaultDependencies
+      include BuildGenerator
 
-      DEPENDENCY_SEP = "\n  "
+      DEFAULT_SEP = "\n  "
 
-      attr_reader :build_file_name
-
-      def initialize
-        @build_file_name = 'build.gradle'
-      end
-
-      def create project_base
-        File.open(File.join(project_base, build_file_name), "w") { |file| file.write(content) }
+      def build_file_name
+        'build.gradle'
       end
 
       def content
-        %Q{apply plugin: 'java'
+        %Q{#{to_plugins}
 version = '1.0.0'
 
 repositories {
@@ -28,8 +22,16 @@ dependencies {
 }}
       end
 
+      def to_plugins
+        default_plugins.map { |plugin| "apply plugin: '#{plugin}'"}.join("\n")
+      end
+
+      def default_plugins
+        %W{java checkstyle}
+      end
+
       def to_dependencies
-        to_compile.join(DEPENDENCY_SEP) + DEPENDENCY_SEP + to_test_compile.join(DEPENDENCY_SEP)
+        to_compile.join(DEFAULT_SEP) + DEFAULT_SEP + to_test_compile.join(DEFAULT_SEP)
       end
 
       def to_test_compile
@@ -38,11 +40,6 @@ dependencies {
 
       def to_compile
         compile_dependencies.map {|dependency| dependency.extend(Gradle).as_compile }
-      end
-
-
-      def self.create project_base
-        GradleBuildGenerator.new.create project_base
       end
 
       module Gradle

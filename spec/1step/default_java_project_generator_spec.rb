@@ -17,7 +17,7 @@ describe "java project generator" do
   end
 
   it "should layout java project as default" do
-    Firstep::Java::ProjectGenerator.new.create(@project_name, @target_dir)
+    Firstep::Java::ProjectGenerator.new(:build => :gradle).create(@project_name, @target_dir)
     
     code_base = File.join(@project_base, "src")
     source_base = File.join(code_base, "main")
@@ -32,13 +32,13 @@ describe "java project generator" do
   end
 
   it "should generate build file" do
-    Firstep::Java::ProjectGenerator.new.create("foo", Dir::tmpdir)
-
+    Firstep::Java::ProjectGenerator.new(:build => :gradle).create("foo", Dir::tmpdir)
     build_file = File.join(@project_base, "build.gradle")
 
     File.should be_exist(build_file)
     File.open(build_file, 'r') do |file| 
       file.read.should == %Q{apply plugin: 'java'
+apply plugin: 'checkstyle'
 version = '1.0.0'
 
 repositories {
@@ -51,6 +51,34 @@ dependencies {
   testCompile 'junit:junit:4.10'
   testCompile 'org.mockito:mockito-all:1.9.0'
 }}
+    end
+  end
+  
+  it "should generate buildfile for buildr" do
+    Firstep::Java::ProjectGenerator.new(:build => :buildr).create("foo", Dir::tmpdir)
+    build_file = File.join(@project_base, "buildfile")
+    File.should be_exist(build_file)
+
+    File.open(build_file, 'r') do |file| 
+      file.read.should == %Q{repositories.remote << 'http://repo1.maven.org/maven2'
+
+compile_dependencies = struct(
+  :guava => 'com.google.guava:guava:jar:13.0',
+  :joda_time => 'joda-time:joda-time:jar:2.1'
+)
+
+test_dependencies = struct(
+  :junit => 'junit:junit:jar:4.10',
+  :mockito => 'org.mockito:mockito-all:jar:1.9.0'
+)
+
+define 'foo' do
+  project.version = '1.0.0'
+  project.group = 'com.foobar' # TODO: change to your group
+
+  compile.with compile_dependencies
+  test.with test_dependencies
+end}
     end
   end
 end
