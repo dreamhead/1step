@@ -11,6 +11,7 @@ describe "java project generator" do
   }
 
   before(:each) do
+    
     @target_dir = Dir::tmpdir
     @project_name = "foo"
     @project_base = File.join(@target_dir, @project_name)
@@ -59,6 +60,12 @@ dependencies {
     build_file = File.join(@project_base, "buildfile")
     File.should be_exist(build_file)
 
+    checkstyle_configuration_file = File.join(@project_base, 'config', 'checkstyle', 'checkstyle.xml')
+    File.should be_exist(checkstyle_configuration_file)
+
+    checkstyle_task_file = File.join(@project_base, 'tasks', 'checkstyle.rake')
+    File.should be_exist(checkstyle_task_file)
+
     File.open(build_file, 'r') do |file| 
       file.read.should == %Q{repositories.remote << 'http://repo1.maven.org/maven2'
 
@@ -78,6 +85,9 @@ define 'foo' do
 
   compile.with compile_dependencies
   test.with test_dependencies
+
+  checkstyle.configuration_file = _('config/checkstyle/checkstyle.xml')
+  checkstyle.fail_on_error = true
 end}
     end
   end

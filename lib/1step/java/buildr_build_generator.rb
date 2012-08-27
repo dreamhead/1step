@@ -3,6 +3,14 @@ module Firstep
     class BuildrBuildGenerator
       include BuildGenerator
 
+      def initialize
+        checkstyle.items << checkstyle_rake
+      end
+
+      def checkstyle_rake
+        ConfigItem.new(File.join(File.dirname(__FILE__), 'checkstyle', 'checkstyle.rake'), 'tasks')
+      end
+
       def build_file_name
         'buildfile'
       end
@@ -24,6 +32,8 @@ define '#{project_name}' do
 
   compile.with compile_dependencies
   test.with test_dependencies
+
+  #{to_configurations}
 end}
       end
 
@@ -39,6 +49,19 @@ end}
         dependencies.map {|dependency| dependency.extend(Buildr).as_buildr_dependency }.join(",\n  ")
       end
 
+      def to_configurations
+        as_configurations.compact.join("\n")
+      end
+
+      def as_configurations
+        configurations.map {|config| checkstyle_config if config.name == 'checkstyle'}
+      end
+
+      def checkstyle_config
+        %Q{checkstyle.configuration_file = _('config/checkstyle/checkstyle.xml')
+  checkstyle.fail_on_error = true}
+      end
+
       module Buildr
         def as_buildr_dependency
           %Q{#{as_ruby_symbol artifact_id} => '#{group_id}:#{artifact_id}:jar:#{version}'}
@@ -49,6 +72,9 @@ end}
           ids = ids[0..-2] if ids[-1] == 'all'
           %Q{:#{ids.join('_')}}
         end
+      end
+
+      module Checkstyle
       end
     end
   end
