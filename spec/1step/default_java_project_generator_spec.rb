@@ -93,6 +93,10 @@ define 'foo' do
 
   cobertura.check.branch_rate = 100
   cobertura.check.line_rate = 100
+end
+
+Buildr.projects.each do |project|
+  task :default => [project.task('checkstyle'), project.task('cobertura:check')]
 end}
     end
   end

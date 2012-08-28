@@ -36,6 +36,10 @@ define '#{project_name}' do
   test.with test_dependencies
 
   #{to_configurations}
+end
+
+Buildr.projects.each do |project|
+  task :default => [#{to_global_dependenies}]
 end}
       end
 
@@ -56,15 +60,14 @@ end}
       end
 
       def as_configurations
-        configurations.map {|config| CONFIGS[config.name] }
+        configurations.map {|config| config.extend(BuildrConfig).task_config}
       end
 
-      CONFIGS = {
-        'checkstyle' => %Q{checkstyle.configuration_file = _('config/checkstyle/checkstyle.xml')
-  checkstyle.fail_on_error = true},
-        'cobertura' => %Q{cobertura.check.branch_rate = 100
-  cobertura.check.line_rate = 100}
-      }
+      def to_global_dependenies
+        configurations.map do |config|
+          %Q{project.task('#{config.extend(BuildrConfig).task_name}')}
+        end.join(", ")
+      end
 
       def to_requires
         %Q{require 'buildr/java/cobertura'}
@@ -82,7 +85,21 @@ end}
         end
       end
 
-      module Checkstyle
+      module BuildrConfig
+        def task_name
+          {
+            'checkstyle' => 'checkstyle',
+            'cobertura' => 'cobertura:check'
+          }[name]
+        end
+
+        def task_config
+          {'checkstyle' => %Q{checkstyle.configuration_file = _('config/checkstyle/checkstyle.xml')
+  checkstyle.fail_on_error = true},
+        'cobertura' => %Q{cobertura.check.branch_rate = 100
+  cobertura.check.line_rate = 100}
+          }[name]
+        end
       end
     end
   end
