@@ -67,7 +67,9 @@ dependencies {
     File.should be_exist(checkstyle_task_file)
 
     File.open(build_file, 'r') do |file| 
-      file.read.should == %Q{repositories.remote << 'http://repo1.maven.org/maven2'
+      file.read.should == %Q{require 'buildr/java/cobertura'
+
+repositories.remote << 'http://repo1.maven.org/maven2'
 
 compile_dependencies = struct(
   :guava => 'com.google.guava:guava:jar:13.0',
@@ -88,6 +90,9 @@ define 'foo' do
 
   checkstyle.configuration_file = _('config/checkstyle/checkstyle.xml')
   checkstyle.fail_on_error = true
+
+  cobertura.check.branch_rate = 100
+  cobertura.check.line_rate = 100
 end}
     end
   end

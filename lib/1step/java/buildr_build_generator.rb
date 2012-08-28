@@ -16,7 +16,9 @@ module Firstep
       end
 
       def content
-        %Q{repositories.remote << 'http://repo1.maven.org/maven2'
+        %Q{#{to_requires}
+
+repositories.remote << 'http://repo1.maven.org/maven2'
 
 compile_dependencies = struct(
   #{to_compile_dependencies}
@@ -50,16 +52,22 @@ end}
       end
 
       def to_configurations
-        as_configurations.compact.join("\n")
+        as_configurations.compact.join("\n\n  ")
       end
 
       def as_configurations
-        configurations.map {|config| checkstyle_config if config.name == 'checkstyle'}
+        configurations.map {|config| CONFIGS[config.name] }
       end
 
-      def checkstyle_config
-        %Q{checkstyle.configuration_file = _('config/checkstyle/checkstyle.xml')
-  checkstyle.fail_on_error = true}
+      CONFIGS = {
+        'checkstyle' => %Q{checkstyle.configuration_file = _('config/checkstyle/checkstyle.xml')
+  checkstyle.fail_on_error = true},
+        'cobertura' => %Q{cobertura.check.branch_rate = 100
+  cobertura.check.line_rate = 100}
+      }
+
+      def to_requires
+        %Q{require 'buildr/java/cobertura'}
       end
 
       module Buildr

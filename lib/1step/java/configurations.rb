@@ -2,13 +2,17 @@ module Firstep
   module Java
     module DefaultConfigurations
       def configurations
-        [checkstyle]
+        [checkstyle, cobertura]
       end
 
       def checkstyle
         @checkstyle ||= Configuration.new('checkstyle') do |config|
           config.items << checkstyle_configuration
         end
+      end
+
+      def cobertura
+        @cobertura ||= Configuration.new('cobertura')
       end
 
       def checkstyle_configuration
