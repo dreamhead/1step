@@ -20,19 +20,19 @@ describe "java project generator" do
     FileUtils.rmtree(@project_base)
   end
 
-  # it "should layout java project as default" do
-  #   Firstep::Java::ProjectGenerator.new(:build => :gradle).create(@project_name, @target_dir)
+  it "should layout java project as default" do
+    Firstep::Java::ProjectGenerator.new(:language => :java, :type => :jar, :build => :buildr).create(@project_name, @target_dir)
     
-  #   code_base = File.join(@project_base, "src")
-  #   source_base = File.join(code_base, "main")
-  #   test_base = File.join(code_base, "test")
-  #   java_source_base = File.join(source_base, 'java')
-  #   java_test_base = File.join(test_base, 'java')
+    code_base = File.join(@project_base, "src")
+    source_base = File.join(code_base, "main")
+    test_base = File.join(code_base, "test")
+    java_source_base = File.join(source_base, 'java')
+    java_test_base = File.join(test_base, 'java')
 
-  #   File.should be_exist(@project_base)
-  #   File.should be_exist(java_source_base)
-  #   File.should be_exist(java_test_base)
-  # end
+    File.should be_exist(@project_base)
+    File.should be_exist(java_source_base)
+    File.should be_exist(java_test_base)
+  end
 
 #   it "should generate build file" do
 #     Firstep::Java::ProjectGenerator.new(:build => :gradle).create("foo", Dir::tmpdir)
@@ -56,9 +56,9 @@ describe "java project generator" do
 # }}
 #     end
 #   end
-  
+
   it "should generate buildfile for buildr" do
-    Firstep::Java::ProjectGenerator.new(:build => :buildr).create("foo", Dir::tmpdir)
+    Firstep::Java::ProjectGenerator.new(:language => :java, :type => :jar, :build => :buildr).create(@project_name, @target_dir)
     build_file = File.join(@project_base, "buildfile")
     File.should be_exist(build_file)
 

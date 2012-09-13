@@ -1,16 +1,28 @@
 require 'fileutils'
+require 'yaml'
 
 module Firstep
   module Template
     include FileUtils
 
     TEMPLATE_EXT = '.erb'
+    FIRSTEP_FILE = '1stepfile'
     def create_project_with_template target_base, options, &block
       mkdir_p target_base
 
       template_dir = template_target(options)
+      firstep_file = File.join(template_dir, FIRSTEP_FILE)
+      create_project_with_firstep_file firstep_file, target_base, &block if File.exists?(firstep_file)
+
       Dir.glob("#{template_dir}/**/*") do |file| 
-        cp_file file, template_dir, target_base, &block
+        cp_file file, template_dir, target_base, &block unless file.end_with?(FIRSTEP_FILE)
+      end
+    end
+
+    def create_project_with_firstep_file firstep_file, target_base, &block
+      configuration = YAML.load_file(firstep_file)
+      configuration['dependencies'].each do |options|
+        create_project_with_template target_base, options, &block
       end
     end
 
@@ -25,11 +37,11 @@ module Firstep
     end
 
     def template_target(options)
-      language = options[:language]
-      type = options[:type]
-      build = options[:build]
+      language = options[:language] || options['language']
+      type = options[:type] || options['type']
+      build = options[:build] || options['build']
 
-      File.join(template_base, language, type, build)     
+      File.join(template_base, language.to_s, type.to_s, build.to_s)
     end
 
     def template_base

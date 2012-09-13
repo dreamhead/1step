@@ -18,10 +18,15 @@ describe "java web project generator" do
     @target_dir = Dir::tmpdir
     @project_name = "foo"
     @project_base = File.join(@target_dir, @project_name)
+    FileUtils.rmtree(@project_base)
   end
 
   it "should generate web.xml" do
-    Firstep::Java::WebGenerator.new(:build => :buildr).create(@project_name, @target_dir)
+    Firstep::Java::ProjectGenerator.new(:language => 'java', :type => 'war', :build => :buildr).create(@project_name, @target_dir)
+
+    build_file = File.join(@project_base, "buildfile")
+    File.should be_exist(build_file)
+
     web_xml = File.join(@project_base, 'src', 'main', 'webapp', 'WEB-INF', 'web.xml')
     File.should be_exist(web_xml)
     File.open(web_xml, 'r') do |file| 
