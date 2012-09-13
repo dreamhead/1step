@@ -12,21 +12,24 @@ module Firstep
         test_base = File.join(code_base, 'test')
         java_source_base = File.join(source_base, 'java')
         java_test_base = File.join(test_base, 'java')
-        ProjectLayout.new(project_base, java_source_base, java_test_base)
+
+        ProjectLayout.new(project_base, source_base, test_base, java_source_base, java_test_base)
       end
 
       attr_reader :project_base, :source_base, :test_base
 
-      def initialize(project_base, source_base, test_base)
+      def initialize(project_base, source_base, test_base, java_source_base, java_test_base)
         @project_base = project_base
         @source_base = source_base
         @test_base = test_base
+        @java_source_base = java_source_base
+        @java_test_base = java_test_base
       end
 
       def create
         mkdir_p(@project_base)
-        mkdir_p(@source_base)
-        mkdir_p(@test_base)
+        mkdir_p(@java_source_base)
+        mkdir_p(@java_test_base)
       end
     end
   end

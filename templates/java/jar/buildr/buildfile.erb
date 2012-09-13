@@ -1,0 +1,31 @@
+require 'buildr/java/cobertura'
+
+repositories.remote << 'http://repo1.maven.org/maven2'
+
+compile_dependencies = struct(
+  :guava => 'com.google.guava:guava:jar:13.0',
+  :joda_time => 'joda-time:joda-time:jar:2.1'
+)
+
+test_dependencies = struct(
+  :junit => 'junit:junit:jar:4.10',
+  :mockito => 'org.mockito:mockito-all:jar:1.9.0'
+)
+
+define '<%= project_name %>' do
+  project.version = '1.0.0'
+  project.group = 'com.foobar' # TODO: change to your group
+
+  compile.with compile_dependencies
+  test.with test_dependencies
+
+  checkstyle.configuration_file = _('config/checkstyle/checkstyle.xml')
+  checkstyle.fail_on_error = true
+
+  cobertura.check.branch_rate = 100
+  cobertura.check.line_rate = 100
+end
+
+Buildr.projects.each do |project|
+  task :default => [project.task('checkstyle'), project.task('cobertura:check')]
+end

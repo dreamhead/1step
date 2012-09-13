@@ -1,59 +1,61 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 require 'tmpdir'
+require 'fileutils'
 
 describe "java project generator" do  
   %Q{
     project 
     |
-    |--src--|--main
-    |       |--test
-    |--build.gradle
+    |--src--|--main--|--java
+    |       |
+    |       |--test--|--java
+    |
+    |--buildfile
   }
 
   before(:each) do
-    
     @target_dir = Dir::tmpdir
     @project_name = "foo"
     @project_base = File.join(@target_dir, @project_name)
+    FileUtils.rmtree(@project_base)
   end
 
-  it "should layout java project as default" do
-    Firstep::Java::ProjectGenerator.new(:build => :gradle).create(@project_name, @target_dir)
+  # it "should layout java project as default" do
+  #   Firstep::Java::ProjectGenerator.new(:build => :gradle).create(@project_name, @target_dir)
     
-    code_base = File.join(@project_base, "src")
-    source_base = File.join(code_base, "main")
-    test_base = File.join(code_base, "test")
-    java_source_base = File.join(source_base, 'java')
-    java_test_base = File.join(test_base, 'java')
+  #   code_base = File.join(@project_base, "src")
+  #   source_base = File.join(code_base, "main")
+  #   test_base = File.join(code_base, "test")
+  #   java_source_base = File.join(source_base, 'java')
+  #   java_test_base = File.join(test_base, 'java')
 
+  #   File.should be_exist(@project_base)
+  #   File.should be_exist(java_source_base)
+  #   File.should be_exist(java_test_base)
+  # end
 
-    File.should be_exist(@project_base)
-    File.should be_exist(java_source_base)
-    File.should be_exist(java_test_base)
-  end
+#   it "should generate build file" do
+#     Firstep::Java::ProjectGenerator.new(:build => :gradle).create("foo", Dir::tmpdir)
+#     build_file = File.join(@project_base, "build.gradle")
 
-  it "should generate build file" do
-    Firstep::Java::ProjectGenerator.new(:build => :gradle).create("foo", Dir::tmpdir)
-    build_file = File.join(@project_base, "build.gradle")
+#     File.should be_exist(build_file)
+#     File.open(build_file, 'r') do |file| 
+#       file.read.should == %Q{apply plugin: 'java'
+# apply plugin: 'checkstyle'
+# version = '1.0.0'
 
-    File.should be_exist(build_file)
-    File.open(build_file, 'r') do |file| 
-      file.read.should == %Q{apply plugin: 'java'
-apply plugin: 'checkstyle'
-version = '1.0.0'
+# repositories {
+#   mavenCentral()
+# }
 
-repositories {
-  mavenCentral()
-}
-
-dependencies {
-  compile 'com.google.guava:guava:13.0'
-  compile 'joda-time:joda-time:2.1'
-  testCompile 'junit:junit:4.10'
-  testCompile 'org.mockito:mockito-all:1.9.0'
-}}
-    end
-  end
+# dependencies {
+#   compile 'com.google.guava:guava:13.0'
+#   compile 'joda-time:joda-time:2.1'
+#   testCompile 'junit:junit:4.10'
+#   testCompile 'org.mockito:mockito-all:1.9.0'
+# }}
+#     end
+#   end
   
   it "should generate buildfile for buildr" do
     Firstep::Java::ProjectGenerator.new(:build => :buildr).create("foo", Dir::tmpdir)

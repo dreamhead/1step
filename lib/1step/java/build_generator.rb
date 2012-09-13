@@ -25,7 +25,6 @@ module Firstep
       end
 
       def create_configurations(project_base)
-        # FileUtils.mkdir_p(@config_base)
         configurations.each do|configuration|
           configuration.items.each do |item|
             real_target_dir = File.join(@project_base, item.target_directory)
@@ -34,14 +33,6 @@ module Firstep
             FileUtils.cp(item.file, File.join(real_target_dir, File.basename(item.file)))
           end
         end
-
-          # configuration_dir = File.join(@config_base, configuration.name)
-          # FileUtils.mkdir_p(configuration_dir)
-
-
-          # src = configuration.default_configuration_file
-          # FileUtils.cp(src, File.join(configuration_dir, File.basename(src)))
-        # end
       end
 
       module BuildGeneratorClassMethod
