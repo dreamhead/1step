@@ -21,7 +21,7 @@ describe "java project generator" do
   end
 
   it "should layout java project as default" do
-    Firstep::Java::ProjectGenerator.new(:language => :java, :type => :jar, :build => :buildr).create(@project_name, @target_dir)
+    Firstep::ProjectGenerator.new(:language => :java, :type => :jar, :build => :buildr).create(@project_name, @target_dir)
     
     code_base = File.join(@project_base, "src")
     source_base = File.join(code_base, "main")
@@ -58,7 +58,7 @@ describe "java project generator" do
 #   end
 
   it "should generate buildfile for buildr" do
-    Firstep::Java::ProjectGenerator.new(:language => :java, :type => :jar, :build => :buildr).create(@project_name, @target_dir)
+    Firstep::ProjectGenerator.new(:language => :java, :type => :jar, :build => :buildr).create(@project_name, @target_dir)
     build_file = File.join(@project_base, "buildfile")
     File.should be_exist(build_file)
 

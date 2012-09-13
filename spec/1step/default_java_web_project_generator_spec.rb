@@ -22,7 +22,7 @@ describe "java web project generator" do
   end
 
   it "should generate web.xml" do
-    Firstep::Java::ProjectGenerator.new(:language => 'java', :type => 'war', :build => :buildr).create(@project_name, @target_dir)
+    Firstep::ProjectGenerator.new(:language => 'java', :type => 'war', :build => :buildr).create(@project_name, @target_dir)
 
     build_file = File.join(@project_base, "buildfile")
     File.should be_exist(build_file)
