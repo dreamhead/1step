@@ -13,7 +13,7 @@ module Firstep
 
       project_options[:type] = :war if options[:war]
       target_directory = '.'
-      Java::ProjectGenerator.new(options).create(project_name, target_directory)
+      Java::ProjectGenerator.new(project_options).create(project_name, target_directory)
   	end
   end
 end
