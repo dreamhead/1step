@@ -32,7 +32,6 @@ module Buildr
 
       after_define do |project|
         if project.checkstyle.enabled?
-          puts "define new task"
           desc "Analyzing soure code with checkstyle."
           project.task("checkstyle") do
             puts "Checkstyle: Analyzing source code..."
