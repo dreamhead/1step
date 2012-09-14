@@ -18,6 +18,7 @@ define '<%= project_name %>' do
 
   compile.with compile_dependencies
   test.with test_dependencies
+  package :jar
 
   checkstyle.configuration_file = _('config/checkstyle/checkstyle.xml')
   checkstyle.fail_on_error = true
