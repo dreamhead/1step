@@ -11,9 +11,14 @@
 <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <script src="js/modernizr.min.js"></script>
 </head>
 <body>
     <#nested/>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
 
