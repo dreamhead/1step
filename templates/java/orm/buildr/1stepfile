@@ -1,0 +1,4 @@
+dependencies:
+  - language: java
+    type: war
+    build: buildr

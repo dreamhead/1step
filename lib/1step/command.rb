@@ -11,7 +11,7 @@ module Firstep
         :build => :buildr
       }
 
-      project_options[:type] = :war if options[:war]
+      project_options[:type] = :orm if options[:war]
       target_directory = '.'
       ProjectGenerator.new(project_options).create(project_name, target_directory)
   	end

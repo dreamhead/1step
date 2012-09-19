@@ -1,0 +1,76 @@
+require 'buildr/java/cobertura'
+require 'buildr/jetty'
+require "readline"
+
+repositories.remote << 'http://repo1.maven.org/maven2'
+
+SPRING_DATA = struct(
+  :core => 'org.springframework.data:spring-data-commons-core:jar:1.3.2.RELEASE',
+  :jpa => 'org.springframework.data:spring-data-jpa:jar:1.1.0.RELEASE'
+)
+
+SPRING_VERSION = '3.1.2.RELEASE'
+SPRING = struct(
+  :core => group('spring-core', 'spring-beans', 'spring-context', 'spring-context-support', :under=>"org.springframework", :version=>SPRING_VERSION),
+  :mvc => transitive("org.springframework:spring-webmvc:jar:#{SPRING_VERSION}"),
+  :orm => group('spring-jdbc', 'spring-tx', 'spring-orm', :under=>"org.springframework", :version=>SPRING_VERSION),
+  :data => SPRING_DATA,
+  :test => "org.springframework:spring-test:jar:#{SPRING_VERSION}"
+)
+
+JDBC_DRIVER = 'mysql:mysql-connector-java:jar:5.1.21'
+
+compile_dependencies = struct(
+  :guava => 'com.google.guava:guava:jar:13.0',
+  :joda_time => 'joda-time:joda-time:jar:2.1',
+  :spring => SPRING,
+  :freemarker => 'org.freemarker:freemarker:jar:2.3.19',
+  :persistence => 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:jar:1.0.1.Final'
+)
+
+test_dependencies = struct(
+  :junit => 'junit:junit:jar:4.10',
+  :mockito => 'org.mockito:mockito-all:jar:1.9.0'
+)
+
+JPA_SUPPORT = struct(
+  :hibernate => group('hibernate-entitymanager', 'hibernate-core', :under => 'org.hibernate', :version => '4.1.6.Final'),
+  :annotation => 'org.hibernate.common:hibernate-commons-annotations:jar:4.0.1.Final',
+  :validator => 'org.hibernate:hibernate-validator:jar:4.3.0.Final',
+  :javassist => 'org.javassist:javassist:jar:3.16.1-GA',
+  :jboss => 'org.jboss.logging:jboss-logging:jar:3.1.2.GA',
+  :jta => 'javax.transaction:jta:jar:1.1',
+  :dom4j => 'dom4j:dom4j:jar:1.6.1'
+)
+
+runtime_dependencies = struct(
+  :connection_pool => 'c3p0:c3p0:jar:0.9.1.2',
+  :log4j => 'log4j:log4j:jar:1.2.17',
+  :jpa_support => JPA_SUPPORT,
+  :driver => JDBC_DRIVER
+)
+
+define '<%= project_name %>' do
+  project.version = '1.0.0'
+  project.group = 'com.foobar' # TODO: change to your group
+
+  compile.with compile_dependencies
+  test.with [test_dependencies, runtime_dependencies]
+  package :war
+
+  checkstyle.configuration_file = _('config/checkstyle/checkstyle.xml')
+  checkstyle.fail_on_error = true
+
+  cobertura.check.branch_rate = 100
+  cobertura.check.line_rate = 100
+
+  desc 'run war with jetty'
+  task("jetty"=>[package(:war), jetty.use]) do |task|
+    jetty.deploy("http://localhost:8080/<%= project_name %>", task.prerequisites.first)
+    Readline::readline('[Type ENTER to stop Jetty]')
+  end
+end
+
+Buildr.projects.each do |project|
+  task :default => [project.task('cobertura:check'), project.task('checkstyle')]
+end
