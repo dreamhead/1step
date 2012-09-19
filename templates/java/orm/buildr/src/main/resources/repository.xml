@@ -31,5 +31,5 @@
           p:jdbcUrl="jdbc:mysql://127.0.0.1/demo" p:user="root"
           p:password=""/>
 
-    <jpa:repositories base-package="com.foo.dao"/>
+    <jpa:repositories base-package="com.foo.repository"/>
 </beans>
