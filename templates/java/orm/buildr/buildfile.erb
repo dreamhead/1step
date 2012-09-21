@@ -62,6 +62,7 @@ define '<%= project_name %>' do
   checkstyle.configuration_file = _('config/checkstyle/checkstyle.xml')
   checkstyle.fail_on_error = true
 
+  cobertura.exclude 'org.springframework.orm.jpa.CustomizeLocalContainerEntityManagerFactoryBean'
   cobertura.check.branch_rate = 100
   cobertura.check.line_rate = 100
 
@@ -73,5 +74,5 @@ define '<%= project_name %>' do
 end
 
 Buildr.projects.each do |project|
-  task :default => [project.task('cobertura:check'), project.task('checkstyle')]
+  task :default => [project.task('checkstyle'), project.task('cobertura:check')]
 end
