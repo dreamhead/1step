@@ -1,3 +1,5 @@
+require 'buildr/jetty'
+
 module Buildr
   module JettyExtension
     module ArchiveTaskExtension
@@ -21,6 +23,26 @@ module Buildr
       "org.slf4j:slf4j-simple:jar:#{SLF4J_VERSION}", "org.slf4j:jcl104-over-slf4j:jar:#{SLF4J_VERSION}" ]
 
     Java.classpath <<  REQUIRES
+
+    class Config
+      attr_writer :port, :context_path
+
+      def port
+        @port || 8080
+      end
+
+      def context_path
+        @context_path || project.name
+      end
+
+      protected
+
+      def initialize(project)
+        @project = project
+      end
+
+      attr_reader :project
+    end
 
     class DynamicJetty
       Server = Java.org.mortbay.jetty.Server
@@ -56,13 +78,26 @@ module Buildr
     module ProjectExtension
       include Extension
 
+      def dynamic_jetty
+        @dynamic_jetty ||= Buildr::JettyExtension::Config.new(project)
+      end
+
       after_define do |project|
         if project.packages.any? {|package| package.war? }
           desc 'run with jetty'
-          project.task('jetty:run') do
-            DynamicJetty.start(project, 8080)
+          project.task('jetty') do
+            DynamicJetty.start(project, project.dynamic_jetty.port, project.dynamic_jetty.context_path)
             Readline::readline('[Type ENTER to stop Jetty]')
           end
+
+          desc 'run war package with jetty'
+          project.task('jetty:war') do |task|
+            project.jetty.deploy("http://localhost:#{project.dynamic_jetty.port}/#{project.dynamic_jetty.context_path}", task.prerequisites.first)
+            Readline::readline('[Type ENTER to stop Jetty]')
+          end
+
+          project.task('jetty' => project.compile)
+          project.task('jetty:war' => [project.package(:war), project.jetty.use])
         end
       end
     end

@@ -35,11 +35,6 @@ define '<%= project_name %>' do
 
   cobertura.check.branch_rate = 100
   cobertura.check.line_rate = 100
-
-  task("jetty"=>[package(:war), jetty.use]) do |task|
-    jetty.deploy("http://localhost:8080/<%= project_name %>", task.prerequisites.first)
-    Readline::readline('[Type ENTER to stop Jetty]')
-  end
 end
 
 Buildr.projects.each do |project|
