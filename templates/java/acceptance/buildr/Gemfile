@@ -1,0 +1,7 @@
+source 'https://rubygems.org'
+
+gem 'buildr'
+
+group(:test) do
+  gem 'cucumber'
+end

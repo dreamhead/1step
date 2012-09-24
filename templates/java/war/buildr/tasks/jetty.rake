@@ -1,19 +1,8 @@
 require 'buildr/jetty'
+require 'readline'
 
 module Buildr
   module JettyExtension
-    module ArchiveTaskExtension
-      def war?
-        false
-      end
-    end
-
-    module WarTaskExtension
-      def war?
-        true
-      end
-    end
-
     VERSION = "6.1.3"
     SLF4J_VERSION = "1.4.3"
 
@@ -84,9 +73,12 @@ module Buildr
 
       after_define do |project|
         if project.packages.any? {|package| package.war? }
-          desc 'run with jetty'
-          project.task('jetty') do
+          project.task('jetty:run') do
             DynamicJetty.start(project, project.dynamic_jetty.port, project.dynamic_jetty.context_path)
+          end
+
+          desc 'run with jetty'
+          project.task('jetty') do            
             Readline::readline('[Type ENTER to stop Jetty]')
           end
 
@@ -96,20 +88,13 @@ module Buildr
             Readline::readline('[Type ENTER to stop Jetty]')
           end
 
-          project.task('jetty' => project.compile)
+          project.task('jetty:run' => project.compile)
+          project.task('jetty' => 'jetty:run')
           project.task('jetty:war' => [project.package(:war), project.jetty.use])
         end
       end
     end
   end
-end
-
-class Buildr::ArchiveTask
-  include Buildr::JettyExtension::ArchiveTaskExtension
-end
-
-class Buildr::Packaging::Java::WarTask
-  include Buildr::JettyExtension::WarTaskExtension
 end
 
 class Buildr::Project
