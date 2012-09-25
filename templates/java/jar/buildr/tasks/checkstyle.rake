@@ -2,6 +2,14 @@ require 'buildr/checkstyle'
 
 module Buildr
   module Checkstyle
+    class Config
+      def ignore_generated_source_paths
+        project.compile.sources.map(&:to_s).select do |source| 
+          not source.include?('generated')
+        end
+      end
+    end
+    
     class << self
       def plain_check(configuration_file, source_paths, options = {})
         dependencies = (options[:dependencies] || []) + self.dependencies
@@ -36,7 +44,7 @@ module Buildr
           project.task("checkstyle") do
             puts "Checkstyle: Analyzing source code..."
             Buildr::Checkstyle.plain_check(project.checkstyle.configuration_file,
-                                           project.checkstyle.source_paths.flatten.compact,
+                                           project.checkstyle.ignore_generated_source_paths.flatten.compact,
                                            :properties => project.checkstyle.properties,
                                            :fail_on_error => project.checkstyle.fail_on_error?,
                                            :dependencies => project.checkstyle.extra_dependencies)
