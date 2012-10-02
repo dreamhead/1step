@@ -1,0 +1,4 @@
+Testsuite: com.foo.controller.FooControllerTest
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.011 sec
+
+Testcase: should_return_person_name took 0.007 sec

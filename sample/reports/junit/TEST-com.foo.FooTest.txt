@@ -1,0 +1,4 @@
+Testsuite: com.foo.FooTest
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.05 sec
+
+Testcase: should_say_hello_to_someone took 0.009 sec
