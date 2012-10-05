@@ -1,4 +1,4 @@
 dependencies:
   - language: java
-    type: jar
+    type: orm
     build: buildr

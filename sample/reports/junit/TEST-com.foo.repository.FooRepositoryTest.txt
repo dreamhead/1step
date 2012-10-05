@@ -1,4 +1,0 @@
-Testsuite: com.foo.repository.FooRepositoryTest
-Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 3.27 sec
-
-Testcase: should_find_foo took 3.262 sec

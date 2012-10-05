@@ -1,9 +1,0 @@
-Testsuite: com.foo.repository.FooEntityTest
-Tests run: 6, Failures: 0, Errors: 0, Time elapsed: 0.038 sec
-
-Testcase: should_not_be_equal_to_null took 0.001 sec
-Testcase: should_be_equal_to_same_entity took 0.003 sec
-Testcase: should_not_be_equal_to_entity_with_different_foo took 0 sec
-Testcase: should_not_be_equal_to_entity_with_different_bar took 0 sec
-Testcase: should_not_be_equal_to_entity_with_different_data took 0 sec
-Testcase: should_be_same_hashcode took 0 sec
