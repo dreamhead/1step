@@ -1,24 +1,22 @@
 # 1step
 
-TODO: Write a gem description
+1step is a software project starter.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Install it from source
 
-    gem '1step'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install 1step
+    rake install
 
 ## Usage
 
-TODO: Write usage instructions here
+To create new Java project
+
+    1step new foo
+
+To create Java web project
+
+    1step new foo --war
 
 ## Contributing
 

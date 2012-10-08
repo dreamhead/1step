@@ -1,0 +1,4 @@
+dependencies:
+  - language: java
+    type: orm
+    build: buildr
