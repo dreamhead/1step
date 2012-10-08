@@ -54,7 +54,7 @@ define '<%= project_name %>' do
   project.version = '1.0.0'
   project.group = 'com.foobar' # TODO: change to your group
 
-  compile.with compile_dependencies
+  compile.with [compile_dependencies, runtime_dependencies]
   test.with [test_dependencies, runtime_dependencies]
   package :war
 

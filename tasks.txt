@@ -1,0 +1,9 @@
+1. buildr task to generating scaffold(controller/model/view).
+2. improve current sample project.
+    create
+    list
+    edit
+    delete
+
+Questions:
+  1. why orm is dependent on war? should it be inversed?

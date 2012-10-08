@@ -37,4 +37,12 @@ public class FooEntity {
     public int hashCode() {
         return Objects.hashCode(name, bar, data);
     }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public String getData(){
+        return this.data;
+    }
 }
